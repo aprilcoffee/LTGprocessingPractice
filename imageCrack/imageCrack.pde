@@ -7,23 +7,28 @@ void setup() {
   hint(DISABLE_DEPTH_TEST);
   img = loadImage("Telescope.jpg");
   imgs = new ArrayList<ShowImage>();
-  for (int s=0; s<1; s++) {
-    imgs.add(new ShowImage(125, 125, 0, 0, 1, 750, new PVector(0, 0), new PVector(0, 0), 0));
-    //x y t_x,t_y,t_l,length v a layer
-  }
+  imgs.add(new ShowImage(125, 125, 0, 0, 1, 750, new PVector(0, 0), new PVector(0, 0), 0));
+  //x y t_x,t_y,t_l,length v a layer
 }
 void draw() {
   background(0);
   for (int s=0; s<imgs.size(); s++) {
     ((ShowImage)(imgs.get(s))).update();
+
     if (random(100)>99) {
-      if (((ShowImage)(imgs.get(s))).layer<5) {
-        ((ShowImage)(imgs.get(s))).crack();
-        imgs.remove(s);
-      }
+      ((ShowImage)(imgs.get(s))).crack();
+      imgs.remove(s);
     }
+
     ((ShowImage)(imgs.get(s))).show();
+    
+    if (((ShowImage)(imgs.get(s))).layer>6) {
+      imgs.remove(s);
+    }
   }
+}
+void keyReleased() {
+  imgs.add(new ShowImage(125, 125, 0, 0, 1, 750, new PVector(0, 0), new PVector(0, 0), 0));
 }
 class ShowImage {
   float px, py;
@@ -38,7 +43,6 @@ class ShowImage {
     py = _y;
     a = _a.copy();
     v = _v.copy();
-    v = new PVector(0,0);
     img_Length = _img_Length;
     textureX = _textureX;
     textureY = _textureY;
